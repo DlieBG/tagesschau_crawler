@@ -1,0 +1,7 @@
+version: '3'
+services:
+  tagesschau_crawler:
+    build: "."
+    container_name: tagesschau_crawler
+    env_file: .env
+    restart: unless-stopped
