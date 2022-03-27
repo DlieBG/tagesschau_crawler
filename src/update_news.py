@@ -1,11 +1,9 @@
 from datetime import datetime, timedelta
+from db import TagesschauDB
 from typing import Tuple
-from pymongo import MongoClient
 from time import sleep
 import requests
-import os
 
-from db import TagesschauDB
 
 class UpdateNews:
 
@@ -43,28 +41,3 @@ class UpdateNews:
                 return index, article
 
         return None, None
-
-
-    def update_article(self, article: dict):
-        try:
-            if requests.get(article['updateCheckUrl']).json():
-                new_article = requests.get(article['details']).json()
-
-                new_article['crawlTimeInsert'] = article['crawlTimeInsert']
-                new_article['crawlTime'] = datetime.now()
-                new_article['crawlType'] = 'update'
-                new_article['crawlIndex'] = article['index']
-                new_article['date'] = datetime.fromisoformat(new_article['date'])
-
-                self.db.news.insert_one(new_article)
-                print('Updated article: ', new_article['title'])
-
-        except Exception as e:
-            print('Error', e)
-
-            del(article['_id'])
-            article['crawlTime'] = datetime.now()
-            article['crawlType'] = 'delete'
-
-            self.db.news.insert_one(article)
-            print('Deleted article: ',  article['title'])

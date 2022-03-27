@@ -1,8 +1,7 @@
+from datetime import datetime, timedelta
 from db import TagesschauDB
-from datetime import datetime
 from time import sleep
 import requests
-import os
 
 class CrawlNews:
 
@@ -19,5 +18,10 @@ class CrawlNews:
 
         for index, article in enumerate(current_articles):
             if article.get('sophoraId', None):
-                if not self.db.get_article(article['sophoraId']):
+                existing_article = self.db.get_article(article['sophoraId'])
+                
+                if not existing_article:
                     self.db.insert_article(article, index)
+                else:
+                    if existing_article['article']['crawler']['crawlTime'] < (datetime.now() - timedelta(days=1)):
+                        self.db.update_article(article, index, article['crawler']['insertTime'])

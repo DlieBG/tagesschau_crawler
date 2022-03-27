@@ -1,6 +1,6 @@
-from sqlite3 import Cursor
 from pymongo import MongoClient
 from datetime import datetime
+from sqlite3 import Cursor
 import os
 
 class TagesschauDB:
