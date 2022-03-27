@@ -28,7 +28,7 @@ class UpdateNews:
                         self.db.update_article(upstream_article, index, article['article']['crawler']['insertTime'])
                 else:
                     if update:
-                        new_article = requests.get(upstream_article['details']).json()
+                        new_article = requests.get(article['article']['details']).json()
                         self.db.update_article(new_article, -1, article['article']['crawler']['insertTime'])
             except Exception as e:
                 print(e)
