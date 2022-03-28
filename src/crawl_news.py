@@ -14,9 +14,9 @@ class CrawlNews:
 
 
     def crawl_articles(self):
-        current_articles = requests.get('https://www.tagesschau.de/api2').json()['news']
+        articles = requests.get('https://www.tagesschau.de/api2').json()['news']
 
-        for index, article in enumerate(current_articles):
+        for index, article in enumerate(articles):
             if article.get('sophoraId', None):
                 existing_article = self.db.get_article(article['sophoraId'])
                 
@@ -24,4 +24,4 @@ class CrawlNews:
                     self.db.insert_article(article, index)
                 else:
                     if existing_article['article']['crawler']['crawlTime'] < (datetime.now() - timedelta(days=1)):
-                        self.db.update_article(article, index, article['crawler']['insertTime'])
+                        self.db.update_article(article, index, existing_article['article']['crawler']['insertTime'])
