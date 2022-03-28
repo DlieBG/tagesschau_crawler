@@ -7,7 +7,7 @@ class TagesschauDB:
 
     db = MongoClient(os.getenv('MONGO_URI')).tagesschau
 
-    def __insert_article(self, article: dict, index: int = -1, insert_time: datetime = datetime.now(), crawl_type: str = 'new'):
+    def __insert_article(self, article: dict, insert_time: datetime, index: int = -1, crawl_type: str = 'new'):
         try:
             del(article['_id'])
         except:
@@ -25,15 +25,15 @@ class TagesschauDB:
         self.db.news.insert_one(article)
 
     def insert_article(self, article: dict, index: int):
-        self.__insert_article(article, index)
+        self.__insert_article(article, datetime.now(), index)
         print('Inserted article: ', article['sophoraId'])
 
     def update_article(self, article: dict, index: int, insert_time: datetime):
-        self.__insert_article(article, index, insert_time=insert_time, crawl_type='update')
+        self.__insert_article(article, insert_time, index, crawl_type='update')
         print('Updated article: ', article['sophoraId'])
 
     def delete_article(self, article: dict, insert_time: datetime):
-        self.__insert_article(article, insert_time=insert_time, crawl_type='delete')
+        self.__insert_article(article, insert_time, crawl_type='delete')
         print('Deleted article: ', article['sophoraId'])
 
     def get_articles(self, sophoraId: str) -> Cursor:
