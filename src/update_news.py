@@ -23,7 +23,7 @@ class UpdateNews:
                 index, upstream_article = self.find_article_in_upstream_articles(article['article']['sophoraId'])
                 update = requests.get(article['article']['updateCheckUrl']).json()
 
-                if index:
+                if index is not None:
                     if update or index is not article['article']['crawler']['index']:
                         self.db.update_article(upstream_article, index, article['article']['crawler']['insertTime'])
                 else:
