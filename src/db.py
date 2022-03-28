@@ -9,20 +9,27 @@ class TagesschauDB:
 
     def __insert_article(self, article: dict, insert_time: datetime, index: int = -1, crawl_type: str = 'new'):
         try:
-            del(article['_id'])
-        except:
-            pass
+            try:
+                del(article['_id'])
+            except:
+                pass
 
-        article['date'] = datetime.fromisoformat(str(article['date']))
-        
-        article['crawler'] = {
-            'index': index,
-            'insertTime': insert_time,
-            'crawlTime': datetime.now(),
-            'crawlType': crawl_type
-        }
+            article['date'] = datetime.fromisoformat(str(article['date']))
+            
+            article['crawler'] = {
+                'index': index,
+                'insertTime': insert_time,
+                'crawlTime': datetime.now(),
+                'crawlType': crawl_type
+            }
 
-        self.db.news.insert_one(article)
+            self.db.news.insert_one(article)
+        except Exception as e:
+            self.db.error.insert_one({
+                'function': 'insert_article',
+                'type': crawl_type,
+                'exception': str(e)
+            })
 
     def insert_article(self, article: dict, index: int):
         self.__insert_article(article, datetime.now(), index)
