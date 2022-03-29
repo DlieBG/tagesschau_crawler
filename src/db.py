@@ -49,6 +49,11 @@ class TagesschauDB:
 
     def get_articles_to_update(self, timestamp: datetime) -> Cursor:
         return self.db.news.aggregate([
+            {
+                '$sort': {
+                    '_id': 1
+                }
+            },
             { 
                 '$match': { 
                     'crawler.crawlTime': { 
@@ -78,6 +83,11 @@ class TagesschauDB:
     def get_article(self, sophoraId: str):
         try:
             return self.db.news.aggregate([
+                {
+                    '$sort': {
+                        '_id': 1
+                    }
+                },
                 { 
                     '$match': { 
                         'sophoraId': sophoraId
