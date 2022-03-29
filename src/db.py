@@ -5,7 +5,8 @@ import os
 
 class TagesschauDB:
 
-    db = MongoClient(os.getenv('MONGO_URI')).tagesschau
+    def __init__(self):
+        self.db = MongoClient(os.getenv('MONGO_URI')).tagesschau
 
     def __insert_article(self, article: dict, insert_time: datetime, index: int = -1, crawl_type: str = 'new'):
         try:
