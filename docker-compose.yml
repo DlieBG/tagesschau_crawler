@@ -1,7 +1,17 @@
 version: '3'
 services:
   tagesschau_crawler:
-    build: "."
-    container_name: tagesschau_crawler
-    env_file: .env
+    build: .
+    environment:
+      MONGO_URI: mongodb://mongo:27017
     restart: unless-stopped
+    depends_on:
+      - mongo
+    tty: true
+  mongo:
+    image: mongo:5.0.6
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db_data:/data/db
