@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   tagesschau_crawler:
     build: .
@@ -8,6 +9,7 @@ services:
     depends_on:
       - mongo
     tty: true
+
   mongo:
     image: mongo:5.0.6
     restart: unless-stopped
